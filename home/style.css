@@ -1,0 +1,533 @@
+/* General Styles (Applied to both pages) */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+body {
+  background-color: #e0e0e0;
+}
+/* index Styles */
+.landing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #c2e9fb 40%, #e2fcfd);
+}
+.content {
+  text-align: center;
+  background-color: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+}
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.logo-img {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+.title, .mood {
+  color: #68a4ff;
+  font-weight: bold;
+}
+.tagline {
+  font-size: 2rem;
+  margin-top: 20px;
+  color: #333;
+}
+.cta-button {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+.cta-button:hover {
+  background-color: #333;
+  text-decoration: none;
+}
+/* Home Styles */
+.header {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.menu-icon {
+  top: 10px;
+  margin-left: auto;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-right: 20px;
+  z-index: 2;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  border-radius: 5px;
+}
+.menu-icon:hover {
+  background-color: #4a90e2;
+}
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  background-color: #fff;
+  overflow-x: hidden;
+  transition: 0.3s;
+  z-index: 1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.sidebar-profile-img {
+  border-radius: 50%;
+  width: 80px;
+  margin-left: 89px;
+  margin-top: 100px;
+}
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #000;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 10px;
+  transition: color 0.2s ease;
+  border-radius: 20px;
+  width: 70%;
+  margin-left: 38px;
+}
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+}
+.sidebar-btn:hover {
+  background-color: #4a90e2;
+  text-decoration: none;
+}
+.login-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 70%;
+}
+.login-btn {
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #000;
+  padding: 10px 20px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  background-color: transparent;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.login-btn:hover {
+  background-color: #4a90e2;
+  text-decoration: none;
+}
+.search-bar {
+  position: relative;
+  justify-content: center;
+  margin: 20px 150px;
+}
+.search-bar input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #0c0c0c;
+  border-radius: 25px ;
+  background-color: #fff;
+}
+.search-bar button {
+  position: absolute;
+  right: 10px;
+  top: 40%;
+  transform: translateY(-50%);
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+}
+.search-bar button:hover {
+  background-color: #0056b3;
+  text-decoration: none;
+}
+.thumbnails {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  padding: 8px;
+}
+.thumbnails a, .thumbnail-emoji {
+  font-size: 5rem; /* Adjust size as desired */
+  cursor: pointer;
+  transition: transform 0.2s;
+  text-decoration: none;
+}
+.music {
+  background-color: #fff; /* Dark background */
+  padding: 20px;
+  color: #000;
+  max-width: 1000px;
+  margin: 10px auto;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.music h1 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #000;
+}
+.music-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+  text-decoration: none;
+}
+.card {
+  background-color: #fff; /* Slightly lighter dark color for cards */
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+}
+.card:hover {
+  transform: scale(1.05); /* Slight scale effect on hover */
+  text-decoration: none;
+}
+.cover {
+  width: 100%;
+  height: 150px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.info {
+  padding: 10px;
+}
+.titlee {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+  margin: 5px 0;
+}
+.artist {
+  font-size: 0.875rem;
+  color: #b3b3b3; /* Gray color for artist name */
+}
+/* Mood Playlist Page Styles */
+.back-button {
+  top: 10px;
+  margin-left: auto;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+  margin-right: 20px;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 7px;
+  border-radius: 5px;
+}
+.back-button:hover {
+  background-color: #4a90e2;
+  text-decoration: none;
+}
+.playlist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 10px;
+}
+.song-item {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+}
+.cover-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  margin-right: 15px;
+}
+.song-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.song-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+.song-info p {
+  margin: 0;
+  font-size: .9rem;
+  color: #777;
+}
+.play-btn {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 7px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.play-btn:hover {
+  background-color: #357ABD;
+  transform: scale(1.05); /* Slight scale effect on hover */
+}
+/* Music Player Styles */
+.player-container {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
+  margin: 0 auto;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+.song-information {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 20px 0;
+}
+.cover-imgg {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+.song-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+.artist-name {
+  font-size: .8rem;
+  color: #777;
+}
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+#seek-bar {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.time-display {
+  display: flex;
+  justify-content: center;
+  gap: 5px; /* Space between the time spans */
+  font-size: 0.8rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+.time-info {
+  margin-bottom: 10px; /* Adds some space between the time info and the buttons */
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Adds some space between the buttons */
+}
+button {
+  background-color: #68a4ff;
+  border: none;
+  padding: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1rem;
+  color: #ffffff;
+}
+button:hover {
+  background-color: #4a90e2;
+}
+.icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100px; /* Adjust as needed */
+  margin: 0 auto; /* Center within parent container */
+  margin-top: 10px;
+}
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 150px);
+  gap: 20px;
+}
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #e9e9e9;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+.grid-item img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+}
+.grid-item:hover {
+  background-color: #dcdcdc;
+  cursor: pointer;
+}
+/*Login and Signup style*/
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh; /* Cover the full viewport height */
+  background: linear-gradient(135deg, #c2e9fb 40%, #e2fcfd);
+}
+.login-form, .register-form {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+.logo img {
+  width: 80px;
+  height: 80px;
+}
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+label {
+  text-align: left;
+  margin: 0.3rem 0 0.2rem;
+  font-weight: bold;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 0.4rem;
+  border: 1px solid #000;
+  border-radius: 25px;
+  margin-bottom: .5rem;
+}
+button[type="submit"] {
+  background: #4a90e2;
+  color: #fff;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 40px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+button[type="submit"]:hover {
+  background: #357ab8;
+}
+.iconss {
+  width: 30px; /* Adjust the size as needed */
+  height: 20px;
+  margin-right: 5px; /* Adds space between icon and text */
+  vertical-align: middle;
+  border-radius: 30px;
+}
+.social-login {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+.social-login button {
+  border: 1px solid #000;
+  padding: 0.2rem;
+  border-radius: 40px;
+  width: 48%;
+  cursor: pointer;
+}
+.google, .facebook {
+  background-color: #fff;
+  color: #000;
+}
+.social-login button:hover {
+  opacity: 0.8;
+}
+a {
+  color: #4a90e2;
+}
+a:hover {
+  text-decoration: underline;
+  text-decoration: none;
+}
+p {
+  margin-top: .5rem;
+  font-size: 0.9rem;
+}
