@@ -17,6 +17,7 @@
 
 <script>
   import Header from "../components/Header.vue";
+  import { musicService } from "../services/music";
 
   export default {
     components: {
@@ -24,36 +25,30 @@
     },
     data() {
       return {
-        sadsongs: [
-          { cover: 'images/someoneyouloved.jpg', title: 'Someone you Loved', artist: 'Lewis Capaldi', audio: 'audio/someoneyouloved.mp3' },
-          { cover: 'images/happierthanever.jpg', title: 'Happier than Ever', artist: 'Billie Eilish', audio: 'audio/happierthanever.mp3' },
-          { cover: 'images/ihateyouiloveyou.jpg', title: 'I hate you I love you', artist: 'Gnash ft. Olivia O Brien', audio: 'audio/ihateyouiloveyou.mp3' },
-          { cover: 'images/beforeyougo.jpg', title: 'Before You Go', artist: 'Lewis Capaldi', audio: 'audio/beforeyougo.mp3' },
-          { cover: 'images/onlylovecanhurtlikethis.jpg', title: 'Only Love Can Hurt Like This', artist: 'Paloma Faith', audio: 'audio/onlylovecanhurtlikethis.mp3' },
-          { cover: 'images/athousandyears.jpg', title: 'A Thousand Years', artist: 'Christina Perri', audio: 'audio/athousandyears.mp3' },
-          { cover: 'images/inthestars.jpg', title: 'In the Stars', artist: 'Benson Boone', audio: 'audio/inthestars.mp3' },
-          { cover: 'images/invisible.jpg', title: 'Invisible', artist: 'Hunter Hayes', audio: 'audio/invisible.mp3' },
-          { cover: 'images/dancingwithyourghost.jpg', title: 'Dancing With Your Ghost', artist: 'Sasha Sloan', audio: 'audio/dancingwithyourghost.mp3' },
-          { cover: 'images/bringmeback.jpg', title: 'Bring Me Back', artist: 'Miles Away ft. Claire Ridgely', audio: 'audio/bringmeback.mp3' },
-        ]
+        sadsongs: []
       };
     },
     methods: {
-    goToMusicPlayer(song) {
-    this.$router.push({
-      name: 'MusicPlayer',
-      query: {
-        title: song.title,
-        artist: song.artist,
-        cover: song.cover,
-        audio: song.audio,
-        playlist: JSON.stringify(this.sadsongs),
-        currentIndex: this.sadsongs.findIndex(s => s.title === song.title)
+      async fetchSongs() {
+        try {
+          const songs = await musicService.getSongsByMood('sad');
+          this.sadsongs = songs;
+        } catch (error) {
+          console.error('Error fetching sad songs:', error);
+        }
+      },
+      goToMusicPlayer(song) {
+        this.$router.push({
+          name: 'MusicPlayer',
+          query: { source: 'SadMood' },
+          params: { song }
+        });
       }
-    });
-  }
-}
-};
+    },
+    created() {
+      this.fetchSongs();
+    }
+  };
 </script>
 
 <style scoped>

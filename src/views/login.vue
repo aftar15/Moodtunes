@@ -7,6 +7,12 @@
         </router-link>
       </div>
       <h2>Login To Continue</h2>
+      
+      <!-- Error Message -->
+      <div v-if="error" class="error-message">
+        {{ error }}
+      </div>
+
       <form @submit.prevent="login">
         <label for="email">E-Mail</label>
         <input
@@ -15,6 +21,7 @@
           v-model="email"
           placeholder="Enter Your E-Mail"
           required
+          :disabled="loading"
         />
 
         <label for="password">Password</label>
@@ -24,25 +31,20 @@
           v-model="password"
           placeholder="Enter Your Password"
           required
+          :disabled="loading"
         />
 
-        <button type="submit">Login</button>
+        <button type="submit" :disabled="loading">
+          {{ loading ? 'Logging in...' : 'Login' }}
+        </button>
 
         <div class="social-login">
-          <button class="google" @click.prevent="loginWithGoogle">
-            <img
-              src="@/assets/images/google.png"
-              alt="Google Icon"
-              class="iconss"
-            />
+          <button class="google" @click.prevent="loginWithGoogle" :disabled="loading">
+            <img src="@/assets/images/google.png" alt="Google Icon" class="iconss" />
             Google
           </button>
-          <button class="facebook" @click.prevent="loginWithFacebook">
-            <img
-              src="@/assets/images/fb.png"
-              alt="Facebook Icon"
-              class="iconss"
-            />
+          <button class="facebook" @click.prevent="loginWithFacebook" :disabled="loading">
+            <img src="@/assets/images/fb.png" alt="Facebook Icon" class="iconss" />
             Facebook
           </button>
         </div>
@@ -59,39 +61,68 @@
 </template>
 
 <script>
-import { authService } from '@/services/auth';
-
 export default {
+  name: 'Login',
   data() {
     return {
       email: '',
       password: '',
+      error: null,
+      loading: false
     };
   },
   methods: {
     async login() {
+      this.error = null;
+      this.loading = true;
+      
       try {
-        const response = await authService.login(this.email, this.password);
-        this.$router.push('/home');
+        const response = await fetch('http://localhost:8000/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Login failed');
+        }
+
+        // Store the token and user data
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // Redirect based on user role
+        if (data.is_admin) {
+          this.$router.push('/admin/dashboard');
+        } else {
+          this.$router.push('/user/dashboard');
+        }
       } catch (error) {
-        alert(error);
+        console.error('Login error:', error);
+        this.error = error.message || 'An error occurred during login';
+      } finally {
+        this.loading = false;
       }
     },
-    logout() {
-      localStorage.removeItem('adminAuth');
-      this.$router.push('/login');
-    },
     loginWithGoogle() {
-      console.log('Logging in with Google');
+      // Implement Google login
     },
     loginWithFacebook() {
-      console.log('Logging in with Facebook');
-    },
+      // Implement Facebook login
+    }
   }
 };
 </script>
 
-  
 <style scoped>
     .container {
       display: flex;
@@ -189,5 +220,18 @@ export default {
     p {
       margin-top: 0.5rem;
       font-size: 0.9rem;
+    }
+    .error-message {
+      color: #dc3545;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
     }
 </style>

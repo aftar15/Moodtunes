@@ -44,3 +44,25 @@ class CategoryController extends Controller
 	{
 		$validator = Validator::make($request->all(), [
 			'name' => 'sometimes|required|string|max:255',
+			'description' => 'nullable|string',
+			'mood_type' => 'sometimes|required|string|max:50',
+			'image_url' => 'nullable|url'
+		]);
+
+		if ($validator->fails()) {
+			return response()->json([
+				'message' => 'Validation failed',
+				'errors' => $validator->errors()
+			], 422);
+		}
+
+		$category->update($request->all());
+		return response()->json($category);
+	}
+
+	public function destroy(Category $category)
+	{
+		$category->delete();
+		return response()->json(null, 204);
+	}
+}

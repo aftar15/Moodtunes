@@ -1,15 +1,7 @@
 import api from './api';
 
 export const musicService = {
-    async getAllSongs() {
-        try {
-            const response = await api.get('/songs');
-            return response.data;
-        } catch (error) {
-            throw error.response ? error.response.data : error.message;
-        }
-    },
-
+    // Fetch songs by mood
     async getSongsByMood(mood) {
         try {
             const response = await api.get(`/songs/mood/${mood}`);
@@ -19,54 +11,51 @@ export const musicService = {
         }
     },
 
-    async getFavorites() {
+    // Get all songs (admin)
+    async getAllSongs() {
         try {
-            const response = await api.get('/favorites');
+            const response = await api.get('/songs');
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : error.message;
         }
     },
 
-    async addToFavorites(songId) {
+    // Add new song (admin)
+    async addSong(songData) {
         try {
-            const response = await api.post('/favorites', { songId });
+            const formData = new FormData();
+            formData.append('title', songData.title);
+            formData.append('artist', songData.artist);
+            formData.append('mood', songData.mood);
+            formData.append('audio', songData.audioFile);
+            formData.append('cover', songData.coverFile);
+
+            const response = await api.post('/songs', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : error.message;
         }
     },
 
-    async removeFromFavorites(songId) {
+    // Delete song (admin)
+    async deleteSong(songId) {
         try {
-            const response = await api.delete(`/favorites/${songId}`);
+            const response = await api.delete(`/songs/${songId}`);
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : error.message;
         }
     },
 
-    async getPlaylists() {
+    // Update song (admin)
+    async updateSong(songId, songData) {
         try {
-            const response = await api.get('/playlists');
-            return response.data;
-        } catch (error) {
-            throw error.response ? error.response.data : error.message;
-        }
-    },
-
-    async createPlaylist(name, description) {
-        try {
-            const response = await api.post('/playlists', { name, description });
-            return response.data;
-        } catch (error) {
-            throw error.response ? error.response.data : error.message;
-        }
-    },
-
-    async addToPlaylist(playlistId, songId) {
-        try {
-            const response = await api.post(`/playlists/${playlistId}/songs`, { songId });
+            const response = await api.put(`/songs/${songId}`, songData);
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : error.message;

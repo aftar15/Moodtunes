@@ -8,4 +8,21 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        port: 5174,
+        proxy: {
+            '^/api': {
+                target: 'http://localhost:8000',
+                changeOrigin: true,
+                secure: false,
+                rewrite: (path) => path
+            },
+            '/sanctum': {
+                target: 'http://localhost:8000',
+                changeOrigin: true,
+                secure: false
+            }
+        }
+    }
+
 });

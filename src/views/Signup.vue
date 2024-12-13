@@ -7,23 +7,32 @@
           </router-link>
         </div>
         <h2>Create Your Account</h2>
+        <div v-if="error" class="error-message">{{ error }}</div>
         <form @submit.prevent="signup">
-          <label for="username">Username</label>
-          <input type="text" id="username" v-model="username" placeholder="Enter Your Username" required />
+          <label for="name">Username</label>
+          <input type="text" id="name" v-model="name" placeholder="Enter Your Username" required />
   
           <label for="email">E-Mail</label>
           <input type="email" id="email" v-model="email" placeholder="Enter Your E-Mail" required />
   
           <label for="password">Password</label>
-          <input type="password" id="password" v-model="password" placeholder="Enter Your Password" required />
+          <input 
+            type="password" 
+            id="password" 
+            v-model="password" 
+            placeholder="Enter Your Password" 
+            required 
+            minlength="8"
+          />
   
-          <label for="confirm-password">Confirm Password</label>
+          <label for="password_confirmation">Confirm Password</label>
           <input
             type="password"
-            id="confirm-password"
-            v-model="confirmPassword"
+            id="password_confirmation"
+            v-model="password_confirmation"
             placeholder="Confirm Your Password"
             required
+            minlength="8"
           />
   
           <button type="submit">Sign Up</button>
@@ -41,136 +50,216 @@
         </form>
       </div>
     </div>
-</template>
+  </template>
   
-<script>
-  import { authService } from '@/services/auth';
+  <script>
   export default {
+    name: 'SignUp',
     data() {
       return {
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+        error: null
       };
     },
     methods: {
+      async getCsrfToken() {
+        try {
+          await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+            method: 'GET',
+            credentials: 'include',
+          });
+        } catch (error) {
+          console.error('Error fetching CSRF token:', error);
+        }
+      },
       async signup() {
         try {
-            await authService.register(this.username, this.email, this.password);
-            await authService.login(this.email, this.password);
-            this.$router.push('/home');
+          this.error = null;
+          if (this.password !== this.password_confirmation) {
+            this.error = "Passwords do not match";
+            return;
+          }
+
+          // Get CSRF token first
+          await this.getCsrfToken();
+          
+          const response = await fetch('http://localhost:8000/api/auth/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              name: this.name,
+              email: this.email,
+              password: this.password,
+              password_confirmation: this.password_confirmation
+            })
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            if (data.errors) {
+              // Handle validation errors
+              const errorMessages = Object.values(data.errors).flat();
+              throw new Error(errorMessages.join('\n'));
+            }
+            throw new Error(data.message || 'Registration failed');
+          }
+
+          // Store token and user data
+          if (data.token && data.user) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            // Redirect to user dashboard since new registrations are always regular users
+            this.$router.push('/user/dashboard');
+          } else {
+            // If we don't get a token and user data, something went wrong
+            throw new Error('Invalid response from server');
+          }
         } catch (error) {
-            alert(error);
+          this.error = error.message || 'Registration failed. Please try again.';
+          console.error('Registration error:', error);
         }
       },
       signupWithGoogle() {
-        console.log("Signing up with Google");
+        // Implement Google signup
       },
       signupWithFacebook() {
-        console.log("Signing up with Facebook");
-      },
+        // Implement Facebook signup
+      }
     },
   };
-</script>
+  </script>
   
-<style scoped>
+  <style scoped>
   .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100vh;
-    background: linear-gradient(135deg, #c2e9fb 40%, #e2fcfd);
+    min-height: 100vh;
+    background: linear-gradient(135deg, #71b7e6, #9b59b6);
   }
+  
   .register-form {
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 40px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
+  }
+  
+  .logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo img {
+    width: 100px;
+    height: 100px;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  .error-message {
+    background-color: #ffe6e6;
+    color: #ff0000;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
     text-align: center;
   }
-  .logo img {
-    width: 80px;
-    height: 80px;
-    transition: transform 0.3s ease;
-  }
-  .logo img:hover {
-    transform: scale(1.1);
-  }
-  h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
+  
   form {
     display: flex;
     flex-direction: column;
   }
+  
   label {
-    text-align: left;
-    margin: 0.3rem 0 0.2rem;
-    font-weight: bold;
+    margin-bottom: 5px;
+    color: #666;
   }
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    padding: 0.4rem;
-    border: 1px solid #000;
-    border-radius: 25px;
-    margin-bottom: 0.5rem;
+  
+  input {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
   }
-  button[type="submit"] {
-    background: #4a90e2;
-    color: #fff;
-    padding: 0.7rem;
+  
+  button {
+    padding: 12px;
+    background: #4CAF50;
+    color: white;
     border: none;
-    border-radius: 40px;
-    font-size: 1rem;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s;
+    font-size: 16px;
+    margin-bottom: 20px;
   }
-  button[type="submit"]:hover {
-    background: #357ab8;
+  
+  button:hover {
+    background: #45a049;
   }
-  .iconss {
-    width: 30px;
-    height: 20px;
-    margin-right: 5px;
-    vertical-align: middle;
-    border-radius: 30px;
-  }
+  
   .social-login {
     display: flex;
-    justify-content: space-between;
-    margin: 1rem 0;
+    gap: 10px;
+    margin-bottom: 20px;
   }
+  
   .social-login button {
-    border: 1px solid #000;
-    padding: 0.2rem;
-    border-radius: 40px;
-    width: 48%;
-    cursor: pointer;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
-  .google,
+  
+  .google {
+    background: #db4437;
+  }
+  
   .facebook {
-    background-color: #fff;
-    color: #000;
+    background: #4267B2;
   }
-  .social-login button:hover {
-    opacity: 0.8;
+  
+  .google:hover {
+    background: #c53929;
   }
+  
+  .facebook:hover {
+    background: #365899;
+  }
+  
+  .iconss {
+    width: 20px;
+    height: 20px;
+  }
+  
+  p {
+    text-align: center;
+    color: #666;
+  }
+  
   a {
-    color: #4a90e2;
+    color: #4CAF50;
     text-decoration: none;
   }
+  
   a:hover {
-    color: #357ab8;
     text-decoration: underline;
   }
-  p {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-  }
-</style>
+  </style>

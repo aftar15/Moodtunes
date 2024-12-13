@@ -1,60 +1,60 @@
 import api from './api';
 
-export const userService = {
-    // Get user profile
-    async getProfile() {
+export const playlistService = {
+    // Get user's playlists
+    async getUserPlaylists() {
         try {
-            const response = await api.get('/user/profile');
+            const response = await api.get('/playlists');
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : error.message;
         }
     },
 
-    // Update user profile
-    async updateProfile(userData) {
+    // Create new playlist
+    async createPlaylist(playlistData) {
         try {
-            const response = await api.put('/user/profile', userData);
+            const response = await api.post('/playlists', playlistData);
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : error.message;
         }
     },
 
-    // Get user favorites
-    async getFavorites() {
+    // Add song to playlist
+    async addSongToPlaylist(playlistId, songId) {
         try {
-            const response = await api.get('/user/favorites');
+            const response = await api.post(`/playlists/${playlistId}/songs`, { songId });
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : error.message;
         }
     },
 
-    // Add to favorites
-    async addToFavorites(songId) {
+    // Remove song from playlist
+    async removeSongFromPlaylist(playlistId, songId) {
         try {
-            const response = await api.post('/user/favorites', { songId });
+            const response = await api.delete(`/playlists/${playlistId}/songs/${songId}`);
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : error.message;
         }
     },
 
-    // Remove from favorites
-    async removeFromFavorites(songId) {
+    // Delete playlist
+    async deletePlaylist(playlistId) {
         try {
-            const response = await api.delete(`/user/favorites/${songId}`);
+            const response = await api.delete(`/playlists/${playlistId}`);
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : error.message;
         }
     },
 
-    // Get user activity logs (admin)
-    async getUserLogs() {
+    // Get playlist details
+    async getPlaylistDetails(playlistId) {
         try {
-            const response = await api.get('/admin/user-logs');
+            const response = await api.get(`/playlists/${playlistId}`);
             return response.data;
         } catch (error) {
             throw error.response ? error.response.data : error.message;
